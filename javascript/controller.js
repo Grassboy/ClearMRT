@@ -288,8 +288,8 @@ $(function(){
         var height = $this.height();
         var real_width = $this[0].naturalWidth;
         var real_height = $this[0].naturalHeight;
-        var x = (e.pageX - offset.left)/width*real_width;
-        var y = (e.pageY - offset.top)/height*real_height;
+        var x = e.offsetX/width*real_width;
+        var y = e.offsetY/height*real_height;
         if(mrt_stations){
             var candidate = [], threshhold = 25;
             for(var name in mrt_stations){
