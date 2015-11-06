@@ -1,0 +1,700 @@
+@import "compass/reset";
+@import "compass/css3";
+@import "compass/utilities/general/clearfix";
+@import "compass/typography/links/link-colors";
+@import "compass/utilities/sprites/base";
+@import "compass/typography/text/replacement";
+@import "compass/css3/user-interface";
+@import "compass/typography/text/ellipsis";
+
+$line1_color: #CC9900;
+$line2_color: #FD5B56;
+$line3_color: #009900;
+$line4_color: #FFCC66;
+$line5_color: #398AFC;
+$btn-size: 24px;
+$header-color: #396aa9;
+$station-bgcolor: white;
+html {
+    background: darken($header-color, 15%);
+}
+body {
+    background: white;
+}
+body , html {
+    margin: 0;
+    padding: 0;
+}
+body * {
+    font-family: '微軟正黑體';
+}
+input:focus {
+   outline: none;
+}
+.page {
+    width: 100%;
+    min-width: 240px;
+    position: relative;
+    padding-top: 50px;
+}
+img {
+    .station-info &,
+    .station-select-map &,
+    .mrt-route-map & {
+        max-width: 100%;
+        display: block;
+        margin: 0 auto;
+    }
+    .station-info & {
+        box-sizing: border-box;
+        box-shadow: 0 0 5px #CCC;
+        border: 1px solid #AAA;
+        max-width: calc(95% - 1px);
+        &[src=""] {
+            display: none;
+        }
+    }
+}
+header {
+    @include clearfix;
+    transition: background-color 0.3s ease-out;
+    padding-top: 8px;
+    background-color: $header-color;
+    color: white;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    min-width: 240px;
+    .searching & {
+        background-color: lighten($header-color, 10%);
+        & ~ .aside-suggest,
+        & ~ .station-select-map {
+            display: block;
+        }
+    }
+    &:after {
+        display: block;
+        position: absolute;
+        content: ' ';
+        width:0;height:0;
+        border-color: transparent transparent $station-bgcolor transparent;
+        border-width:5px;
+        border-style:solid;
+        bottom: -20px;
+        opacity: 0;
+        transition: left 0.3s ease-out, opacity 0.3s ease-out;
+    }
+    &.assign-from:after {
+        opacity: 1;
+        left: calc(5% + 36px);
+        bottom: 0px;
+    }
+    &.assign-to:after {
+        opacity: 1;
+        left: calc(50% + 36px);
+        bottom: 0px;
+    }
+}
+.search-text {
+    @include ellipsis(true);
+    width: calc(100% - 24px);
+    min-width: 240px - $btn-size*3;
+    display: inline-block;
+    width: 100%;
+    letter-spacing: 0;
+    &:empty {
+        display:none;
+    }
+}
+.aside-suggest {
+    display: none;
+    width: 100%;
+    z-index: 5;
+    position: fixed;
+    top: 44px;
+    box-shadow: 0 3px 3px white;
+    &:before, &:after {
+        content: ' ';
+        display: block;
+        width: 10px; height: 100%;
+        position: absolute;
+        top: 0;
+        z-index: 1;
+    }
+    &:before {
+        left: 0;
+	    @include background-image(linear-gradient(left, $station-bgcolor, rgba($station-bgcolor, 0)));
+    }
+    &:after {
+        right: 0;
+	    @include background-image(linear-gradient(right, $station-bgcolor, rgba($station-bgcolor, 0)));
+    }
+}
+.suggest-stations {
+    background-color: $station-bgcolor;
+    padding: 10px 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: scroll;
+    position: relative;
+    box-sizing: border-box;
+    & li {
+        @include user-select(none);
+        margin: 0 5px;
+        padding: 3px;
+        border-radius: 3px;
+        color: white;
+        display: inline-block;
+        text-shadow: 0 -1px 0 black;
+        font-weight: bold;
+
+        &:hover {
+            position: relative;
+            top: -2px;
+        }
+    }
+}
+.near-suggest {
+    width: 100%;
+    z-index: 5;
+    position: fixed;
+    top: 44px;
+    box-shadow: 0 3px 3px white;
+    &:empty {
+        display: none;
+    }
+    &:before, &:after {
+        content: ' ';
+        display: block;
+        width: 10px; height: 100%;
+        position: absolute;
+        top: 0;
+        z-index: 10;
+    }
+    &:before {
+        left: 0;
+	    @include background-image(linear-gradient(left, $station-bgcolor, rgba($station-bgcolor, 0)));
+    }
+    &:after {
+        right: 0;
+	    @include background-image(linear-gradient(right, $station-bgcolor, rgba($station-bgcolor, 0)));
+    }
+
+}
+.near-stations {
+    background-color: $station-bgcolor;
+    padding: 10px 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: scroll;
+    position: relative;
+    box-sizing: border-box;
+    .near-item {
+        display: inline-block;
+        margin:0 10px 0 5px;
+        position: relative;
+    }
+    & label {
+        @include user-select(none);
+        padding: 0 3px;
+        border-radius: 3px;
+        color: white;
+        text-shadow: 0 -1px 0 black;
+        font-weight: bold;
+        margin-right: 16px;
+    }
+    .result-time, .result-price {
+        display: inline-block;
+        width: 1em;
+        margin: 0 1em 0 2px;
+        transform: scale(0.7);
+        position: absolute;
+        right: -1.1em;
+    }
+    .result-time {
+        transform-origin: 0 0;
+        top: -3px;
+    }
+    .result-price {
+        transform-origin: 0 100%;
+        bottom: -3px;
+    }
+}
+.query-result {
+    margin-top: 2em;
+    .searching &, .initializing & {
+        display: none;
+    }
+}
+.init-tips {
+    text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
+    display: none;
+    .initializing & {
+        display: block;
+    }
+    .searching & {
+        display: none;
+    }
+}
+.tips1 {
+    background-image: url("../images/arrow1.png");
+    background-repeat: no-repeat;
+    color: #333;
+    font-size: 1.8em;
+    height: 75px;
+    letter-spacing: 3px;
+    line-height: 4.5em;
+    text-indent: 75px;
+    transform: scale(0.5) rotate(3deg) translate(0px, -9px);
+    transform-origin: 0 0 0;
+    position: absolute;
+    left: 0; top: 50px;
+    opacity: 0.6;
+}
+.tips2 {
+    background-image: url("../images/arrow2.png");
+    background-position: right center;
+    background-repeat: no-repeat;
+    color: blue;
+    font-size: 2em;
+    font-weight: bold;
+    height: 75px;
+    letter-spacing: 3px;
+    line-height: 4.5em;
+    padding-right: 75px;
+    text-align: right;
+    transform: scale(0.5) rotate(-5deg) translate(-25px, -9px);
+    transform-origin: 100% 0 0;
+    width: 370px;
+    position: absolute;
+    right: 0; top: 50px;
+}
+.tips3 {
+    text-align: center;
+    background-image: url("../images/maintips.png");
+    background-repeat: no-repeat;
+    background-position: center 1.2em;
+    @media screen and (max-width: 350px) {
+        line-height: 1.4em;
+        letter-spacing: 0;
+        background-size: contain;
+        background-position: center 30%;
+    }
+    height: 360px;
+    margin-top: 70px;
+    @media screen and (min-width: 600px) {
+        margin-top: 20px;
+    }
+    font-size: 1.2em;
+    color: navy;
+    text-shadow: 0 1px 0 #DDD;
+    letter-spacing: 3px;
+}
+.result-title {
+    margin: 12px;
+    font-size: 1.2em;
+    text-align: center;
+    transition: font-size 0.3s ease-out;
+    @media screen and (max-width: 320px) {
+        font-size: 1em;
+    }
+}
+.result-title em {
+    color: white;
+    padding: 3px;
+    display: inline-block;
+    border-radius: 3px;
+    text-shadow: 0 -1px 0 black;
+    font-weight: bold;
+}
+.result-title em[class="line4"],
+.near-stations [class="line4"],
+.suggest-stations [class="line4"] {
+    color: black;
+    text-shadow: 0 1px 0 white;
+}
+.line1 {
+    background-color: $line1_color;
+}
+.line2 {
+    background-color: $line2_color;
+}
+.line3 {
+    background-color: $line3_color;
+}
+.line4 {
+    background-color: $line4_color;
+}
+.line5 {
+    background-color: $line5_color;
+}
+.line1.line2 {
+    @include background-image(linear-gradient(top, $line2_color 50%, $line1_color 50%));
+}
+.line1.line3 {
+    @include background-image(linear-gradient(top, $line3_color 50%, $line1_color 50%));
+}
+.line1.line5 {
+    @include background-image(linear-gradient(top, $line5_color 50%, $line1_color 50%));
+}
+.line2.line3 {
+    @include background-image(linear-gradient(top, $line2_color 50%, $line3_color 50%));
+}
+.line2.line4 {
+    @include background-image(linear-gradient(top, $line2_color 50%, $line4_color 50%));
+}
+.line2.line5 {
+    @include background-image(linear-gradient(top, $line2_color 50%, $line5_color 50%));
+}
+.line3.line4 {
+    @include background-image(linear-gradient(top, $line3_color 50%, $line4_color 50%));
+}
+.line3.line5 {
+    @include background-image(linear-gradient(top, $line3_color 50%, $line5_color 50%));
+}
+.line4.line5 {
+    @include background-image(linear-gradient(top, $line4_color 50%, $line5_color 50%));
+}
+.station-select-map {
+    display: none;
+    margin-top: 36px;
+}
+.header-text {
+    float: left;
+    margin: 8px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    max-width: calc(100% - 96px);
+    .searching header & {
+        display: none;
+    }
+}
+.btn-icon {
+    display: inline-block;
+    width: $btn-size; height: $btn-size;
+    font-size: $btn-size * 0.8;
+    text-align: center;
+    line-height: $btn-size;
+    text-shadow: 1px 0 0 navy;
+    vertical-align: top;
+    &.btn-search, &.btn-setting {
+        margin: 6px;
+    }
+    label {
+        display: none;
+    }
+    &.btn-search {
+        float: right;
+    }
+    &.btn-setting {
+        float: left;
+    }
+}
+.searching header .btn-search {
+    text-shadow: 0 0 3px #FFC;
+}
+form {
+    @include clearfix;
+    margin: 2px 0;
+    display: none;
+    .searching header & {
+        display: block;
+    }
+}
+.query-input {
+    width: 100%;
+    position: relative;
+    float: left;
+    margin: 4px;
+    box-sizing: border-box;
+    .btn-icon {
+        font-size: $btn-size*0.6;
+        color: #63CCAE;
+        text-shadow: 1px 0 0 darken(#63CCAE, 30%);
+    }
+}
+.station {
+    width: calc(50% - 32px);
+    margin: 0; padding: 2px;
+    height: $btn-size;
+    font-size: $btn-size*0.7;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: none;
+    border-bottom:1px solid rgba(white, 0.7);
+    border-radius: 2px;
+    color: white;
+    background: transparent;
+    &:focus {
+        box-shadow: 0 3px 3px -3px lighten($header-color, 30%);
+        border-color: white;
+    }
+}
+.btn-reverse {
+    margin: 0 12px;
+}
+.station.station-to {
+    &::-moz-placeholder {  /* Firefox 19+ */
+        color: white;
+    }
+}
+.station.station-to {
+    &::-webkit-input-placeholder ,
+    &:-moz-placeholder , /* Firefox 18- */
+    &:-ms-input-placeholder ,  
+    &::-moz-placeholder {  /* Firefox 19+ */
+        color: white;
+    }
+}
+#btn-query-submit {
+    display: none;
+}
+.btn-query {
+    width: 50px;
+    margin: 0; padding: 0;
+    border: 1px solid navy;
+    background-color: #35B5FF;
+    box-sizing: border-box;
+    border-radius: 2px;
+    font-size: 1em;
+}
+.route-between-result {
+    &.collapsed {
+        display: none;
+    }
+    @include clearfix;
+    .time, .price, .routing-tips {
+        label {
+            color: gray;
+        }
+    }
+}
+.time, .price {
+    float: left;
+    width: 40%;
+    box-sizing: border-box;
+    margin: 5%;
+    text-align: center;
+    @media screen and (min-width: 500px) {
+        width: 20%; margin: 3% 0.2%;
+    }
+    em {
+        font-size: 4em;
+        position: relative;
+        display: block;
+        &:after {
+            font-size: 10px;
+            position: absolute;
+            float: right;
+            bottom: 1em;
+        }
+    }
+}
+.time em:after {
+    content: '分';
+}
+.price em:after {
+    content: '元';
+}
+.routing-tips {
+    float: left;
+    width: 80%; margin: 2% 10%;
+    @media screen and (min-width: 500px) {
+        width: 50%; margin: 3% 1.8%;
+    }
+    p {
+        padding: 3%;
+        line-height: 1.6em;
+    }
+}
+.route-all-result {
+    margin-bottom: 2em;
+    &.collapsed {
+        .result-title {
+            margin: 0;
+            transform: scale(0.8);
+            opacity: 0.5;
+            &:after {
+                content:' (展開)';
+                color: gray;
+            }
+        }
+        .route-pages-tab, .route-page {
+            display: none;
+        }
+    }
+}
+@mixin line-tab($color, $text: '') {
+    background-color: $color;
+    &.active {
+        box-shadow: 0 0 0 1px white, 0 0 2px 2px $color;
+    }
+    @media screen and (max-width: 400px) {
+        &:before {
+            content: $text;
+            opacity: 0.5;
+        }
+    }
+}
+.route-pages-tab {
+    margin: 1.2em 0;
+    text-align: center;
+    @media screen and (max-width: 400px) {
+        margin-top: 0.5em;
+    }
+    li {
+        @include user-select(none);
+        display: inline-block;
+        color: white;
+        text-shadow: 0 -1px 0 black;
+        padding: 3px;
+        border-radius: 2px;
+        font-weight: bold;
+        margin: 3px;
+        text-align: center;
+        box-sizeing: border-box;
+        @media screen and (max-width: 400px) {
+            border-radius: 1em;
+            width: calc(12% - 1.2em);
+            label {
+                display: none;
+            }
+        }
+        @media screen and (max-width: 280px) {
+            width: 1.2em;
+            margin: 0;
+        }
+    }
+    .route-all {
+	    @include background-image(linear-gradient(top, $line1_color 20%, $line2_color 20%, $line2_color 40%, $line3_color 40%, $line3_color 60%, $line4_color 60%, $line4_color 80%, $line5_color 80%, $line5_color 100%));
+        @include line-tab(#777, '*');
+        text-shadow: 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, -1px -1px 0 black;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+    .route-line1 {
+        @include line-tab($line1_color, '1');
+    }
+    .route-line2 {
+        @include line-tab($line2_color, '2');
+    }
+    .route-line3 {
+        @include line-tab($line3_color, '3');
+    }
+    .route-line4 {
+        color: black;
+        text-shadow: 0 -1px 0 white;
+        @include line-tab($line4_color, '4');
+    }
+    .route-line5 {
+        @include line-tab($line5_color, '5');
+    }
+}
+#route-page-all.collapsed {
+    display: none;
+}
+#route-page-line1, #route-page-line2, #route-page-line3, #route-page-line4, #route-page-line5 {
+    @include clearfix;
+    max-width: 400px;
+    width: 80%;
+    @media screen and (max-width: 400px) {
+        width: 90%;
+    }
+    margin: 0 auto;
+    vertical-align: top;
+    &.collapsed {
+        display: none;
+    }
+}
+.table {
+    display: table;
+    width: 100%;
+    position: relative;
+}
+.tr {
+    display: table-row;
+    &:nth-child(odd) {
+        background: #F5F5F5;
+    }
+    &:hover {
+        background: #FFD;
+    }
+}
+.td {
+    display: table-cell;
+    height: 1.6em;
+    padding: 5px;
+    line-height: 2em;
+    @media screen and (max-width: 430px) {
+        line-height: 1.6em;
+    }
+}
+.result-name {
+    width: 40%;
+    label {
+        margin: 3px; padding: 3px;
+        font-size: 1.2em;
+        font-weight: bold;
+        border-radius: 3px;
+        color: white;
+        text-shadow: 0 -1px 0 black;
+        @media screen and (max-width: 430px) {
+            font-size: 1em;
+        }
+        #route-page-line4 & {
+            color: black;
+            text-shadow: 0 -1px 0 white;
+        }
+    }
+    @media screen and (max-width: 340px) {
+        width: 64%;
+        label {
+            font-size: 1em;
+        }
+    }
+}
+.result-time, .result-price {
+    text-align: center;
+    width: 30%;
+    position: relative;
+    &:after {
+        position: absolute;
+        bottom: -0.2em;
+        left: calc(50% + 1em);
+        font-size: 0.6em;
+        color: gray;
+    }
+    @media screen and (max-width: 340px) {
+        width: 18%;
+    }
+}
+.result-time:after {
+    content: '分';
+}
+.result-price:after {
+    content: '元';
+}
+.social-link {
+    margin-top: 20px;
+    padding: 10px
+}
+footer {
+    background: darken($header-color, 15%);
+    color: #bbb;
+    margin: 0;
+    padding: 5px;
+    box-shadow: 0 5px 5px -5px #333 inset;
+    p {
+        &:first-child {
+            font-size: 14px;
+            color: #DDD;
+        }
+        line-height: 1.4em;
+        font-size: 12px;
+        margin-top: 0.4em;
+    }
+    a {
+        color: white;
+    }
+}
