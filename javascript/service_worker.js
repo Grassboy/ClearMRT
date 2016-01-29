@@ -3,6 +3,7 @@ this.addEventListener('install', function(event) {
     caches.open('v1').then(function(cache) {
       return cache.addAll([
         '/ClickMRT/',
+        '/ClickMRT/index.html',
         '/ClickMRT/stylesheets/screen.css',
         '/ClickMRT/fonts/style.css',
         '/ClickMRT/javascript/jquery.history.js',
