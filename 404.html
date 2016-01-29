@@ -13,7 +13,7 @@ permalink: /404.html
     <script>
         var pagename = location.href.substr(location.href.lastIndexOf('/'));
         if(pagename.indexOf('.')===-1) {
-            location.href = pagename.replace('/', '?');
+            location.href = pagename.replace('/', './?');
         } else {
             document.body.innerHTML = '404 error!!';
             document.title = '404 error!!';
