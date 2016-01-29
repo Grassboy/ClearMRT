@@ -127,11 +127,6 @@
                 </div>
             </section>
         </article>
-        <aside class="social-link">
-            <div class="fb-like" data-href="<?=$_url?>" data-send="false" data-width="300" data-show-faces="false" data-font="trebuchet ms"></div>
-            <div class="g-plusone" data-href="<?=$_url?>" data-size="standard" data-annotation="inline" data-width="300"></div>
-            <div class="plurk-pu" data-href="<?=$_url?>" data-img="<?=$_plurk_img?>" data-title="<?=$_title?>" data-status="<?=$_plurk_status?>" data-width="300"></div>
-        </aside>
         <footer>
             <p>【<?=$_title?>】<?=$_description?> by Grassboy</p>
             <p>
@@ -141,30 +136,6 @@
             </p>
         </footer>
     </div>
-	<script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/zh_TW/all.js#xfbml=1&appId=136757766392653";
-        fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
-    <script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "https://grassboy.github.io/plurkTool/push_button/main.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'grassboy-plurk-pu'));</script>
-
-	<script type="text/javascript">
-	  window.___gcfg = {lang: 'zh-TW'};
-
-	  (function() {
-	    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-	    po.src = 'https://apis.google.com/js/plusone.js';
-	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-	  })();
-	</script>
 </div>
 <script src="javascript/controller.js" type="text/javascript"></script>
 <script src="javascript/app.js" type="text/javascript"></script>
