@@ -497,7 +497,7 @@ $(function(){
         },
         function(r){
             mrt_stations = r;
-            var matches = location.pathname.match(/^\/ClickMRT\/\??([^\-\.\/]+)(\-([^\-\.\/]+))?$/);
+            var matches = location.href.split(location.host)[1].match(/^\/ClickMRT\/\??([^\-\.\/]+)(\-([^\-\.\/]+))?$/);
             if(matches){
                 try {
                     var from = decodeURIComponent(matches[1]),
