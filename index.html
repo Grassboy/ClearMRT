@@ -1,28 +1,28 @@
-<?
-    include('config/config.inc.php')
-?>
 <!DOCTYPE HTML>
 <html>
 <head>
+    <!--
+    為了放到 https://grassboy.github.io/ClickMRT/ 所以 clone 一份 index.php 執行的結果在 index.html
+    -->
     <link rel="manifest" href="manifest.json?v=2">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-url" content="clickmrt">
-	<meta name="description" content="<?=$_description?>" />
-	<meta property="og:title" content="<?=$_title?>" />
-	<meta property="og:url" content="<?=$_url?>" />
-	<meta property="og:image" content="<?=$_thumb?>" />
-	<meta property="og:site_name" content="<?=$_title?>" />
-	<meta property="og:description" content="<?=$_description?>" />
-    <meta property="fb:admins" content="<?=$_fb_admin_id?>" />
+	<meta name="description" content="讓你快速查詢各站間票價、行車時間的捷運資訊小幫手" />
+	<meta property="og:title" content="ClickMRT" />
+	<meta property="og:url" content="http://grassboy.github.io/ClickMRT/" />
+	<meta property="og:image" content="http://i.imgur.com/GFpM7P2.png" />
+	<meta property="og:site_name" content="ClickMRT" />
+	<meta property="og:description" content="讓你快速查詢各站間票價、行車時間的捷運資訊小幫手" />
+    <meta property="fb:admins" content="663898857" />
 	<link rel="shortcut icon" href="images/favicon.png" />
     <!-- metro by Dominique Vicent from the Noun Project -->
 	<link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
 	<link href="fonts/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
 	<script src="javascript/jquery.js" type="text/javascript"></script>
 	<script src="javascript/jquery.history.js" type="text/javascript"></script>
-	<title><?=$_title?></title>
+	<title>ClickMRT</title>
 </head>
 <body>
 <div class="container initializing">
@@ -128,12 +128,12 @@
             </section>
         </article>
         <aside class="social-link">
-            <div class="fb-like" data-href="<?=$_url?>" data-send="false" data-width="300" data-show-faces="false" data-font="trebuchet ms"></div>
-            <div class="g-plusone" data-href="<?=$_url?>" data-size="standard" data-annotation="inline" data-width="300"></div>
-            <div class="plurk-pu" data-href="<?=$_url?>" data-img="<?=$_plurk_img?>" data-title="<?=$_title?>" data-status="<?=$_plurk_status?>" data-width="300"></div>
+            <div class="fb-like" data-href="http://grassboy.tw/ClickMRT/" data-send="false" data-width="300" data-show-faces="false" data-font="trebuchet ms"></div>
+            <div class="g-plusone" data-href="http://grassboy.tw/ClickMRT/" data-size="standard" data-annotation="inline" data-width="300"></div>
+            <div class="plurk-pu" data-href="http://grassboy.tw/ClickMRT/" data-img="http://i.imgur.com/MsZmpVw.png" data-title="ClickMRT" data-status="{href} 讓你快速查詢各站間票價、行車時間的捷運資訊小幫手 {img}" data-width="300"></div>
         </aside>
         <footer>
-            <p>【<?=$_title?>】<?=$_description?> by Grassboy</p>
+            <p>【ClickMRT】讓你快速查詢各站間票價、行車時間的捷運資訊小幫手 by Grassboy</p>
             <p>
                 本網頁製作僅供學術交流，無任何營利用途，頁面中所取用到的捷運路線圖、捷運站資訊、各站行駛時間、捷運票價，版權所屬皆屬
                 <a href="http://www.trtc.com.tw" target="_blank">台北捷運公司</a>
@@ -170,4 +170,5 @@
 <script src="javascript/app.js" type="text/javascript"></script>
 </body>
 </html>
+
 
