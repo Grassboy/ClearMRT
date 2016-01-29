@@ -13,6 +13,7 @@ this.addEventListener('install', function(event) {
         '/ClickMRT/images/arrow2.png',
         '/ClickMRT/images/maintips.png',
         '/ClickMRT/images/routemap201411.jpg',
+        '/ClickMRT/images/favicon.jpg',
         '/ClickMRT/fonts/fonts/icomoon.ttf?1w02bs',
         '/ClickMRT/fonts/fonts/icomoon.woff?1w02bs',
         '/ClickMRT/fonts/fonts/icomoon.svg?1w02bs#icomoon'
