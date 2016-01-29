@@ -6,9 +6,18 @@ permalink: /404.html
 <html>
   <head>
     <meta charset=utf-8>
-    <title>404 Error</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+    <title>Redirecting...</title>
   </head>
   <body>
-    <h1>404 Error</h1>
+    <script>
+        var pagename = location.href.substr(location.href.lastIndexOf('/'));
+        if(pagename.indexOf('.')===-1) {
+            location.href = pagename.replace('/', '?');
+        } else {
+            document.body.innerHTML = '404 error!!';
+            document.title = '404 error!!';
+        }
+    </script>
   </body>
 </html>
