@@ -1,13 +1,11 @@
 if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('/ClickMRT/javascript/service_worker.js', {
-		scope: '/ClickMRT/'
-	}).then(function(reg) {
+	navigator.serviceWorker.register('/ClickMRT/javascript/service_worker.js').then(function(reg) {
 		if (reg.installing) {
-			alert('Service worker installing');
+			console.log('Service worker installing');
 		} else if (reg.waiting) {
-			alert('Service worker installed');
+			console.log('Service worker installed');
 		} else if (reg.active) {
-			alert('Service worker active');
+			console.log('Service worker active');
 		}
 	}).catch(function(error) {
 		// registration failed
