@@ -2,8 +2,7 @@
 <table xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
   <meta>
   <author>Christian Heilmann (and altered by grassboy)</author>
-  <description>HTML pages that need post data with contentType</description>
-  <reference>http://isithackday.com/hacks/htmlpost/htmlpost.xml</reference>
+  <description>HTML pages that need post data with contentType (ref from http://grassboy.github.io/ClickMRT/data/yql.xml)</description>
   <sampleQuery><![CDATA[ 
 select * from {table} where
 url='http://isithackday.com/hacks/htmlpost/index.php' 

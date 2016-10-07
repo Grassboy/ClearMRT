@@ -378,17 +378,25 @@ header {
     line-height: $btn-size;
     text-shadow: 1px 0 0 navy;
     vertical-align: top;
-    &.btn-search, &.btn-setting {
+    &.btn-search, &.btn-setting, &.btn-speech {
         margin: 6px;
     }
     label {
         display: none;
     }
-    &.btn-search {
+    &.btn-search, &.btn-speech {
         float: right;
     }
     &.btn-setting {
         float: left;
+    }
+}
+.btn-speech {
+    &.btn-icon {
+        display: none;
+        .searching & {
+            display: inline-block;
+        }
     }
 }
 .searching header .btn-search {
@@ -431,7 +439,7 @@ form {
         border-color: white;
     }
 }
-.btn-reverse {
+.btn-exchange {
     margin: 0 12px;
 }
 .station.station-to {

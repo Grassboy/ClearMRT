@@ -4,8 +4,11 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <link rel="manifest" href="manifest.json?v=2">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-url" content="clickmrt">
 	<meta name="description" content="<?=$_description?>" />
 	<meta property="og:title" content="<?=$_title?>" />
 	<meta property="og:url" content="<?=$_url?>" />
@@ -16,7 +19,7 @@
 	<link rel="shortcut icon" href="/favicon.ico" />
 	<link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
 	<link href="fonts/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
+	<script src="javascript/jquery.js" type="text/javascript"></script>
 	<script src="javascript/jquery.history.js" type="text/javascript"></script>
 	<title><?=$_title?></title>
 </head>
@@ -26,11 +29,12 @@
         <header class="header">
             <div class="btn-icon btn-setting btn-easycard"></div>
             <h1 class="header-text"><em>ClickMRT</em><span class="search-text"></span></h1>
+            <div class="btn-icon btn-speech"></div>
             <div class="btn-icon btn-search"></div>
             <form role="search" action="index.php" action="get">
                 <div class="query-input">
                     <input type="text" name="station-from" class="station station-from" placeholder="出發站" readonly="readonly"><div
-                    class="btn-icon btn-reverse"><label>對調</label>
+                    class="btn-icon btn-exchange"><label>對調</label>
                     </div><input type="text" name="station-to" class="station station-to" placeholder="其他各站" readonly="readonly">
                 </div>
                 <input type="submit" id="btn-query-submit" />
@@ -68,7 +72,7 @@
             </ul>
         </aside>
         <aside class="station-select-map">
-            <img src="http://web.trtc.com.tw/img/all/routemap201411.jpg" />
+            <img src="https://web.trtc.com.tw/img/all/routemap201411.jpg" />
         </aside>
         <article class="init-tips">
             <section class="tips1">
@@ -108,7 +112,7 @@
                     </ul>
                     <div id="route-page-all" class="route-page collapsed">
                         <div class="mrt-route-map">
-                            <img src="http://web.trtc.com.tw/img/all/routemap201411.jpg" />
+                            <img src="https://web.trtc.com.tw/img/all/routemap201411.jpg" />
                         </div>
                         <div class="near-suggest">
                             <ul class="near-stations"></ul>
@@ -147,7 +151,7 @@
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) {return;}
         js = d.createElement(s); js.id = id;
-        js.src = "http://grassboy.tw/plurkTool/push_button/main.js";
+        js.src = "https://grassboy.github.io/plurkTool/push_button/main.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'grassboy-plurk-pu'));</script>
 
@@ -160,8 +164,9 @@
 	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 	  })();
 	</script>
-	<script src="javascript/controller.js" type="text/javascript"></script>
 </div>
+<script src="javascript/controller.js" type="text/javascript"></script>
+<script src="javascript/app.js" type="text/javascript"></script>
 </body>
 </html>
 
