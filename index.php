@@ -18,7 +18,11 @@
     <meta property="fb:admins" content="<?=$_fb_admin_id?>" />
 	<link rel="shortcut icon" href="images/favicon.png" />
     <!-- metro by Dominique Vicent from the Noun Project -->
-	<link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <!-- for dev
+	<link href="http://grassboy.tw:24680/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+	<script src="http://grassboy.tw:35729/livereload.js" type="text/javascript"></script>
+    -->
+	<link href="stylesheets/screen.css?v=2" media="screen, projection" rel="stylesheet" type="text/css" />
 	<link href="fonts/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
 	<script src="javascript/jquery.js" type="text/javascript"></script>
 	<script src="javascript/jquery.history.js" type="text/javascript"></script>
@@ -73,7 +77,7 @@
             </ul>
         </aside>
         <aside class="station-select-map">
-            <img src="https://web.trtc.com.tw/img/all/routemap201411.jpg" />
+            <img src="http://web.metro.taipei/img/all/routemap2017.jpg" />
         </aside>
         <article class="init-tips">
             <section class="tips1">
@@ -87,6 +91,16 @@
             </section>
         </article>
         <article class="query-result">
+            <section class="station-countdown">
+                <h3 class="result-title"><em class="line1"><label>台北車站</label></em> 列車進站時間</h3>
+                <ul class="countdown-lines">
+                    <li class="countdown-br"></li>
+                    <li class="countdown-r"></li>
+                    <li class="countdown-g"></li>
+                    <li class="countdown-o"></li>
+                    <li class="countdown-bl"></li>
+                </ul>
+            </section>
             <section class="station-info">
                 <h3 class="result-title"><em class="line1"><label>台北車站</label></em> 首末班車資訊</h3>
                 <img src="" />
@@ -113,7 +127,7 @@
                     </ul>
                     <div id="route-page-all" class="route-page collapsed">
                         <div class="mrt-route-map">
-                            <img src="https://web.trtc.com.tw/img/all/routemap201411.jpg" />
+                            <img src="http://web.metro.taipei/img/all/routemap2017.jpg" />
                         </div>
                         <div class="near-suggest">
                             <ul class="near-stations"></ul>
@@ -128,7 +142,7 @@
             </section>
         </article>
         <aside class="social-link">
-            <div class="fb-like" data-href="<?=$_url?>" data-send="false" data-width="300" data-show-faces="false" data-font="trebuchet ms"></div>
+            <div class="fb-like" style="width: 100%; overflow: hidden; display: block;" data-href="<?=$_url?>" data-width="300" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
             <div class="g-plusone" data-href="<?=$_url?>" data-size="standard" data-annotation="inline" data-width="300"></div>
             <div class="plurk-pu" data-href="<?=$_url?>" data-img="<?=$_plurk_img?>" data-title="<?=$_title?>" data-status="<?=$_plurk_status?>" data-width="300"></div>
         </aside>
@@ -141,13 +155,16 @@
             </p>
         </footer>
     </div>
-	<script>(function(d, s, id) {
+    <div id="fb-root"></div>
+    <script>
+    (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
         js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/zh_TW/all.js#xfbml=1&appId=136757766392653";
+        js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.9";
         fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
     <script>(function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) {return;}

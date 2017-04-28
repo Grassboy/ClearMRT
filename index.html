@@ -128,7 +128,7 @@
             </section>
         </article>
         <aside class="social-link">
-            <div class="fb-like" data-href="http://grassboy.tw/ClickMRT/" data-send="false" data-width="300" data-show-faces="false" data-font="trebuchet ms"></div>
+            <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-width="300" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
             <div class="g-plusone" data-href="http://grassboy.tw/ClickMRT/" data-size="standard" data-annotation="inline" data-width="300"></div>
             <div class="plurk-pu" data-href="http://grassboy.tw/ClickMRT/" data-img="http://i.imgur.com/MsZmpVw.png" data-title="ClickMRT" data-status="{href} 讓你快速查詢各站間票價、行車時間的捷運資訊小幫手 {img}" data-width="300"></div>
         </aside>
@@ -141,13 +141,17 @@
             </p>
         </footer>
     </div>
-	<script>(function(d, s, id) {
+    <div id="fb-root"></div>
+    <script>
+    (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
         js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/zh_TW/all.js#xfbml=1&appId=136757766392653";
+        js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.9";
         fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <script>(function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) {return;}
