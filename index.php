@@ -19,11 +19,11 @@
 	<link rel="shortcut icon" href="images/favicon.png" />
     <!-- metro by Dominique Vicent from the Noun Project -->
     <!-- for dev
-	<link href="stylesheets/screen.css?v=2" media="screen, projection" rel="stylesheet" type="text/css" />
-    -->
 	<link href="http://grassboy.tw:24680/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
 	<script src="http://grassboy.tw:35729/livereload.js" type="text/javascript"></script>
+    -->
 	<link href="fonts/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
+	<link href="stylesheets/screen.css?v=3" media="screen, projection" rel="stylesheet" type="text/css" />
 	<script src="javascript/jquery.js" type="text/javascript"></script>
 	<script src="javascript/jquery.history.js" type="text/javascript"></script>
 	<title><?=$_title?></title>
