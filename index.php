@@ -19,10 +19,10 @@
 	<link rel="shortcut icon" href="images/favicon.png" />
     <!-- metro by Dominique Vicent from the Noun Project -->
     <!-- for dev
+	<link href="stylesheets/screen.css?v=2" media="screen, projection" rel="stylesheet" type="text/css" />
+    -->
 	<link href="http://grassboy.tw:24680/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
 	<script src="http://grassboy.tw:35729/livereload.js" type="text/javascript"></script>
-    -->
-	<link href="stylesheets/screen.css?v=2" media="screen, projection" rel="stylesheet" type="text/css" />
 	<link href="fonts/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
 	<script src="javascript/jquery.js" type="text/javascript"></script>
 	<script src="javascript/jquery.history.js" type="text/javascript"></script>
@@ -45,6 +45,15 @@
                 <input type="submit" id="btn-query-submit" />
             </form>
         </header>
+        <aside class="speech-input-placeholder">
+            <div class="speech-input-inner-box">
+                <h3 class="speech-input-title">請說話</h3>
+                <ul class="speech-input-example-list">
+                    <li class="speech-input-example-item"><em>台北車站</em>到<em>南港展覽館</em></li>
+                    <li class="speech-input-example-item"><em>忠孝新生</em></li>
+                </ul>
+            </div>
+        </aside>
         <aside class="aside-suggest">
             <ul class="suggest-stations">
                 <li class="line1 line2">

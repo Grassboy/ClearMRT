@@ -16,10 +16,12 @@ $(function(){
     });
     History.Adapter.bind(window,'statechange',function(){
         var State = History.getState();
-        document.title = State.title || 'ClickMRT';
-        $station_from.val(State.data.from || '');
-        $station_to.val(State.data.to || '');
-        searchHandler(true);
+        if(State.data.is_clickMRT) {
+            document.title = State.title || 'ClickMRT';
+            $station_from.val(State.data.from || '');
+            $station_to.val(State.data.to || '');
+            searchHandler(true);
+        }
     });
     var LocalStorage = function(key, value){
         try {
@@ -54,6 +56,70 @@ $(function(){
             });
         }
     };
+    var attachWebkitSpeechRecognition = function(target, placeholder, callback, opts) {
+        if(!window.webkitSpeechRecognition) {
+            return;
+        }
+        opts = opts || {};
+        var prev_speech_input_time = null;
+        var is_recognizing = false;
+        var recognition = new webkitSpeechRecognition();
+        var $placeholder = $(placeholder);
+        recognition.lang = 'cmn-Hant-TW';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.onresult = function(e) {
+            var final_transcript = '';
+            for (var i = e.resultIndex; i < e.results.length; ++i) {
+                if (e.results[i].isFinal) {
+                    final_transcript += e.results[i][0].transcript;
+                }
+            }
+            $placeholder.find('.speech-input-title').text(final_transcript);
+            if(callback(final_transcript)){
+                $('body').removeClass('speech-input');
+            }
+        };
+        recognition.onend = function(){
+            is_recognizing = false;
+            $placeholder.removeClass('speech-input-recognizing');
+        };
+        var stopRecognition = function(){
+            recognition.onend();
+            recognition.stop();
+        }
+        var startRecognition = function(){
+            if(is_recognizing) {
+                stopRecognition();
+            } else {
+                is_recognizing = true;
+                $placeholder.addClass('speech-input-recognizing');
+                (typeof opts.beforeStart == 'function') && opts.beforeStart();
+                $placeholder.find('.speech-input-title').text('請說話');
+                recognition.start();
+                prev_speech_input_time = (new Date()).getTime();
+                History.pushState({is_speech_input: true, time: prev_speech_input_time}, ['請輸入語音訊息 - ClickMRT '].join(''), '/ClickMRT/');
+            }
+        }
+        History.Adapter.bind(window,'statechange',function(){
+            var State = History.getState();
+            if(State.data.is_speech_input) {
+                if(State.data.time == prev_speech_input_time) {
+                    $('body').addClass('speech-input');
+                    return;
+                }
+            }
+            $('body').removeClass('speech-input');
+        });
+        $placeholder.find('.speech-input-title').click(startRecognition);
+        target.addEventListener('click', startRecognition);
+        $placeholder.bind('touchstart', function(e){
+            if(e.target == $placeholder[0]) {
+                stopRecognition();
+                $('body').removeClass('speech-input');
+            }
+        });
+    };
 
     //Global Value;
     var mrt_stations = null;
@@ -82,6 +148,25 @@ $(function(){
         'FFCC66': 'line4',
         '398AFC': 'line5'
     }
+    var fixStationName = function(name){
+        if(mrt_stations[name]) {
+            return name;
+        } else {
+            name = name.replace(/站$/, '');
+            switch(name) {
+            case "台北101":
+            case "世貿":
+            case "101":
+                name = "台北101世貿";
+                break;
+            default:
+                break;
+            }
+        }
+        if(mrt_stations[name]) {
+            return name;
+        }
+    };
     //DOM
     var $document = $(document),
         $container = $('.container'),
@@ -179,6 +264,7 @@ $(function(){
             );
         }
         var countdown_url = "https://query.yahooapis.com/v1/public/yql?q=use 'http%3A%2F%2Fgrassboy.tw%2FClickMRT%2Fdata%2Fyql.xml' as soap_table%3B%0Aselect * from soap_table where %0Aurl %3D 'http%3A%2F%2Fws.metro.taipei%2Ftrtcappweb%2Ftraintime.asmx' and %0Acontenttype %3D \"application%2Fsoap%2Bxml%3B charset%3Dutf-8\" and%0Apostdata%3D '<%3Fxml version%3D\"1.0\" encoding%3D\"utf-8\"%3F><soap12%3AEnvelope xmlns%3Axsi%3D\"http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance\" xmlns%3Axsd%3D\"http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema\" xmlns%3Asoap12%3D\"http%3A%2F%2Fwww.w3.org%2F2003%2F05%2Fsoap-envelope\"> <soap12%3ABody> <GetNextTrain2 xmlns%3D\"http%3A%2F%2Ftempuri.org%2F\"> <stnid>"+station.id+"<%2Fstnid> <%2FGetNextTrain2> <%2Fsoap12%3ABody><%2Fsoap12%3AEnvelope>' and%0Axpath %3D \"%2F%2Fdetail\"&format=json";
+        $countdown_ul.find('.countdown-item').remove();
         $.get(countdown_url, function(r){
             var renderCountdown = function(d) {
                 var line_id = d.stnid.replace(/[\d]/g, '').toLowerCase();
@@ -193,10 +279,13 @@ $(function(){
                 if($line_item.length == 0) {
                     alert('line item error'+ '.countdown-'+line_id);
                 }
-                $line_item.append($('<span class="countdown-item">'+d.destination+'<em>'+$.trim(d.countdown)+'</em></span>'));
+                var countdown = $.trim(d.countdown);
+                if(countdown == '00:00') {
+                    countdown = '進站中';
+                }
+                $line_item.append($('<span class="countdown-item">'+d.destination+'<em>'+countdown+'</em></span>'));
             };
             if(r && r.query && r.query.results && r.query.results.postresult && r.query.results.postresult.detail) {
-                $countdown_ul.find('.countdown-item').remove();
                 if(!r.query.results.postresult.detail.forEach) {
                     var d = (r.query.results.postresult.detail);
                     renderCountdown(d);
@@ -234,7 +323,7 @@ $(function(){
         }
         $container.removeClass('initializing');
         if(from && to) {
-            if(!ignore_pushstate) History.pushState({from: from.name, to: to.name}, [from.name,' 到 ',to.name, ' - ClickMRT'].join(''), '/ClickMRT/'+from.name+'-'+to.name);
+            if(!ignore_pushstate) History.pushState({is_clickMRT: true, from: from.name, to: to.name}, [from.name,' 到 ',to.name, ' - ClickMRT'].join(''), '/ClickMRT/'+from.name+'-'+to.name);
             $time_and_price_result.detach().prependTo($query_result);
             $station_info_img.attr('src', 'http://web.metro.taipei/img/ALL/TTPDF/JPG/'+from.id.split('-').pop()+'.JPG');
             $search_text.text([from.name,' 到 ',to.name].join(''));
@@ -278,14 +367,14 @@ $(function(){
             $route_all_result.removeClass('collapsed');
             $route_between_result.addClass('collapsed');
             if (from) {
-                if(!ignore_pushstate) History.pushState({from: from.name}, [from.name,' 到其他各站 - ClickMRT'].join(''), '/ClickMRT/'+from.name);
+                if(!ignore_pushstate) History.pushState({is_clickMRT: true, from: from.name}, [from.name,' 到其他各站 - ClickMRT'].join(''), '/ClickMRT/'+from.name);
                 $station_info_img.attr('src', 'http://web.metro.taipei/img/ALL/TTPDF/JPG/'+from.id.split('-').pop()+'.JPG');
                 $search_text.text([from.name,' 到其他各站'].join(''));
                 $result_from_label.text(from.name);
                 $result_from_em.attr('class', from.line.join(' '));
                 if(ignore_pushstate) renderAllOtherStations(from);
             } else if (to) {
-                if(!ignore_pushstate) History.pushState({from: to.name}, [to.name,' 到其他各站 - ClickMRT'].join(''), '/ClickMRT/'+to.name);
+                if(!ignore_pushstate) History.pushState({is_clickMRT: true, from: to.name}, [to.name,' 到其他各站 - ClickMRT'].join(''), '/ClickMRT/'+to.name);
                 $station_from.val(to_val);
                 $station_to.val('');
                 $station_info_img.attr('src', 'http://web.metro.taipei/img/ALL/TTPDF/JPG/'+to.id.split('-').pop()+'.JPG');
@@ -294,7 +383,7 @@ $(function(){
                 $result_from_em.attr('class', from.line.join(' '));
                 if(ignore_pushstate) renderAllOtherStations(to);
             } else {
-                if(!ignore_pushstate) History.pushState({}, 'ClickMRT', '/ClickMRT/');
+                if(!ignore_pushstate) History.pushState({is_clickMRT: true}, 'ClickMRT', '/ClickMRT/');
                 $header_text.attr('style', null);
                 $search_text.text('');
                 $container.addClass('initializing');
@@ -334,6 +423,42 @@ $(function(){
         var tmp = $station_to.val();
         $station_to.val($station_from.val());
         $station_from.val(tmp);
+    });
+    attachWebkitSpeechRecognition($('.btn-speech')[0], $('.speech-input-placeholder')[0], function(input){
+        var regexp_list = [{
+            regexp: /^(捷運)?([\d\D]+)(時間|票價|末班車)?$/,
+            patten_index: [2]
+        }, {
+            regexp: /^(捷運)?([\d\D]+)到([\d\D]+)$/,
+            patten_index: [2, 3]
+        }];
+        var matches, from, to;
+        for(var i = 0, n = regexp_list.length; i < n; ++i){
+            var item = regexp_list[i];
+            if(matches = input.match(item.regexp)) {
+                if(item.patten_index.length == 2) {
+                    from = fixStationName(matches[item.patten_index[0]]);
+                    to = fixStationName(matches[item.patten_index[1]]);
+                    if(from && to){
+                        $station_from.val(from);
+                        $station_to.val(to);
+                        searchHandler();
+                        return true;
+                    }
+                } else if(item.patten_index.length == 1) {
+                    from = fixStationName(matches[item.patten_index[0]]);
+                    if(from) {
+                        $station_from.val(from);
+                        $station_to.val('');
+                        searchHandler();
+                        return true;
+                    }
+                }
+            }
+        }
+    }, {
+        beforeStart: function(){
+        }
     });
     var map_click_handler = function(e){
         var $this = $(this);
@@ -480,7 +605,7 @@ $(function(){
     }
     getJSONCache('total_stations', "https://query.yahooapis.com/v1/public/yql?q=select%20alt%2C%20coords%2C%20href%2C%20content%2C%20style%20from%20html%20where%20url%3D%22http%3A%2F%2Fweb.metro.taipei%2Fc%2FTBselectstation2010.asp%22%20and%0A%20%20%20%20%20%20(xpath%3D'%2F%2F*%2Fmap%2Farea'%20or%20xpath%3D'%2F%2F*%2Foption')&format=json&diagnostics=true&callback=",
         function(r){
-            var mrt_stations = {};
+            mrt_stations = {};
             if (r && r.query && r.query.count > 0) {
                 var stations = r.query.results.area;
                 var stations2 = r.query.results.option;
@@ -558,15 +683,13 @@ $(function(){
             var matches = location.pathname.match(/^\/ClickMRT\/([^\-\.\/]+)(\-([^\-\.\/]+))?$/);
             if(matches){
                 try {
-                    var from = decodeURIComponent(matches[1]),
-                        to = decodeURIComponent(matches[3]);
-                    if(from !== '台北車站') from = from.replace(/站$/, '');
-                    if(to !== '台北車站') to = to.replace(/站$/, '');
-                    if(mrt_stations[from] && mrt_stations[to]){
+                    var from = fixStationName(decodeURIComponent(matches[1])),
+                        to = fixStationName(decodeURIComponent(matches[3]));
+                    if(from && to){
                         $station_from.val(from);
                         $station_to.val(to);
                         searchHandler(true);
-                    } else if (mrt_stations[from]) {
+                    } else if (from) {
                         $station_from.val(from);
                         $station_to.val('');
                         searchHandler(true);

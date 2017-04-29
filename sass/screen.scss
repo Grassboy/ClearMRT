@@ -15,6 +15,22 @@ $line5_color: #398AFC;
 $btn-size: 24px;
 $header-color: #396aa9;
 $station-bgcolor: white;
+
+@mixin icomoon(){
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 html {
     background: darken($header-color, 15%);
     position: relative;
@@ -447,9 +463,6 @@ form {
         border-color: white;
     }
 }
-.btn-exchange {
-    margin: 0 12px;
-}
 .station.station-to {
     &::-moz-placeholder {  /* Firefox 19+ */
         color: white;
@@ -466,6 +479,80 @@ form {
 #btn-query-submit {
     display: none;
 }
+// {{ speech-input
+.speech-input-placeholder {
+    transition: background-color 0.2s ease-out, visibility 0.2s ease-out;
+    background-color: transparent;
+    visibility: hidden;
+    position: fixed;
+    left: 0; top: 0; right: 0; bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .speech-input & {
+        background-color: rgba(black, 0.3);
+        visibility: visible;
+    }
+}
+.speech-input-inner-box {
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+    opacity: 0;
+    transform: translateY(60px);
+    background: white;
+    color: #666;
+    padding: 1.5em;
+    width: 80%;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px rgba(black, 0.4);
+    .speech-input & {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+.speech-input-example-list {
+    &:before {
+        color: #BBB;
+        content: '例句：';
+    }
+}
+.speech-input-example-item {
+    line-height: 1.2em;
+    margin: 0.45em;
+    em {
+        font-weight: bold;
+        margin: 0.3em;
+    }
+}
+.speech-input-title {
+    text-align: center;
+    &:after {
+        transition: background-color 0.2s ease-out;
+        @include icomoon();
+        $size: 80px;
+        display: block;
+        margin: 15px auto;
+        padding: 0;
+        line-height: $size;
+        width: $size; height: $size;
+        font-size: $size*0.6;
+        text-align: center;
+        text-indent: 0.05em;
+        border-radius: 100%;
+        box-shadow: 0 0 0 3px #AAA;
+        content: '\e900';
+        background-color: gray;
+        color: white;
+        .speech-input-recognizing & {
+            background-color: #39E5C3;
+        }
+    }
+}
+.btn-exchange {
+    margin: 0 12px;
+}
+// }}
 .btn-query {
     width: 50px;
     margin: 0; padding: 0;
