@@ -1,5 +1,8 @@
 $(function(){
-    screen.orientation.lock('portrait');
+    window.screen && screen.orientation && screen.orientation.lock('portrait');
+    window.onerror = function(a,b,c){
+        alert([a,b,c].join(' '));
+    }
     $('body').bind('touchstart', function(e){
         e = e.originalEvent;
         if(e.touches.length > 3){
@@ -75,6 +78,7 @@ $(function(){
                     final_transcript += e.results[i][0].transcript;
                 }
             }
+            final_transcript = final_transcript.replace(/\s/g, '');
             $placeholder.find('.speech-input-title').text(final_transcript);
             if(callback(final_transcript)){
                 $('body').removeClass('speech-input');
@@ -152,7 +156,7 @@ $(function(){
         if(mrt_stations[name]) {
             return name;
         } else {
-            name = name.replace(/站$/, '');
+            name = name.replace(/(站)?(時間|票價|末班車)?$/, '');
             switch(name) {
             case "台北101":
             case "世貿":
@@ -217,8 +221,15 @@ $(function(){
         if(mrt_to_stations[station.name] !== null) { //need reset
             mrt_to_stations = {};
             mrt_to_stations[station.name] = {name: station.name};
-            getJSONCache("from_station"+station.id, "https://query.yahooapis.com/v1/public/yql?q=select%20style%2C%20font.content%20from%20html%20where%20url%3D%22http%3A%2F%2Fweb.metro.taipei%2Fc%2FTicketALLresult.asp%3Fs2elect%3DSTATION-"+station.id+"%22%20and%20xpath%3D'%2F%2Ftable%5B%40id%3D%22table3%22%5D%2Ftbody%2Ftr%2Ftd'&format=json&diagnostics=true&callback=", 
+            getJSONCache("from_station"+station.id, "https://query.yahooapis.com/v1/public/yql?q=use%20'http%3A%2F%2Fgrassboy.tw%2FClickMRT%2Fdata%2Fyql_html.xml%3Ffe333133173f2wfew'%20as%20html%3B%0Aselect%20td.style%2C%20td.font.content%20from%20html%20where%20url%3D%22http%3A%2F%2Fweb.metro.taipei%2Fc%2FTicketALLresult.asp%3Fs2elect%3DSTATION-"+station.id+"%22%20and%20xpath%3D'%2F%2Ftable%5B%40id%3D%22table3%22%5D%2Ftbody%2Ftr%2Ftd'&format=json&callback=", 
                 function(r){
+                    var new_result = {td:[]};
+                    if(r && r.query && r.query.results && r.query.results.postresult) {
+                        r.query.results.postresult.forEach(function(d){
+                            new_result.td.push(d.td);
+                        });
+                    }
+                    r.query.results = new_result;
                     if(!(r && r.query && r.query.results && (results = r.query.results.td)) && (results.length % 7 == 0)) {
                         alert(station.name+' 到各站資料載入失敗 (北捷改資料格式啦XD)');
                         return;
@@ -337,11 +348,11 @@ $(function(){
             $route_between_result.removeClass('collapsed');
             $route_all_result.addClass('collapsed');
             $near_suggest.html('');
-            getJSONCache(['from_station',from.id,'to',to.id].join(''), "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fweb.metro.taipei%2Fc%2F2stainfo.asp%3Faction%3Dquery%26s1elect%3DSTATION-"+from.id+"%26s2elect%3DSTATION-"+to.id+"%22%20and%20xpath%3D'%2F%2F*%2Ftd%2Fdiv%2Ffont'&format=json&diagnostics=true&callback=",
+            getJSONCache(['from_station',from.id,'to',to.id].join(''), "https://query.yahooapis.com/v1/public/yql?q=use%20'http%3A%2F%2Fgrassboy.tw%2FClickMRT%2Fdata%2Fyql_html.xml%3Ffe333133173f2wfew'%20as%20html%3B%0Aselect%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fweb.metro.taipei%2Fc%2F2stainfo.asp%3Faction%3Dquery%26s1elect%3DSTATION-"+from.id+"%26s2elect%3DSTATION-"+to.id+"%22%20and%20xpath%3D'%2F%2F*%2Ftd%2Fdiv%2Ffont'&format=json&diagnostics=true&callback=",
                 function(r){
                     var result;
-                    if(r.query && r.query.results && r.query.results.font.length == 11){
-                        var tds = r.query.results.font;
+                    if(r.query && r.query.results && r.query.results.postresult && r.query.results.postresult.font.length == 11){
+                        var tds = r.query.results.postresult.font;
                         result = {
                             time: tds[8].content.match(/\d+/),
                             price: tds[4].content.match(/\d+/),
@@ -603,10 +614,19 @@ $(function(){
         $price_label.text('敬老/愛心票價');
         break;
     }
-    getJSONCache('total_stations', "https://query.yahooapis.com/v1/public/yql?q=select%20alt%2C%20coords%2C%20href%2C%20content%2C%20style%20from%20html%20where%20url%3D%22http%3A%2F%2Fweb.metro.taipei%2Fc%2FTBselectstation2010.asp%22%20and%0A%20%20%20%20%20%20(xpath%3D'%2F%2F*%2Fmap%2Farea'%20or%20xpath%3D'%2F%2F*%2Foption')&format=json&diagnostics=true&callback=",
+    getJSONCache('total_stations', "https://query.yahooapis.com/v1/public/yql?q=use%20%27http%3A%2F%2Fgrassboy.tw%2FClickMRT%2Fdata%2Fyql_html.xml%3Ffe333133173f2wfew%27%20as%20html%3B%0Aselect%20area.alt%2C%20area.coords%2C%20area.href%2C%20option.content%2C%20option.style%20from%20html%20where%20url%3D%22http%3A%2F%2Fweb.metro.taipei%2Fc%2FTBselectstation2010.asp%22%20and%0A(xpath%3D%27%2F%2F*%2Fmap%2Farea%27%20or%20xpath%3D%27%2F%2F*%2Foption%27)&format=json&callback=",
         function(r){
             mrt_stations = {};
             if (r && r.query && r.query.count > 0) {
+                var new_result = {area:[], option:[]};
+                r.query.results.postresult.forEach(function(d){
+                    if(d.area) {
+                        new_result.area.push(d.area);
+                    } else if(d.option) {
+                        new_result.option.push(d.option);
+                    }
+                });
+                r.query.results = new_result;
                 var stations = r.query.results.area;
                 var stations2 = r.query.results.option;
                 for (var i = 0, n = stations.length; i < n; ++i) {

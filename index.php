@@ -1,10 +1,13 @@
 <?
+    header("Expires: " . date("D, j M Y", strtotime("+2 days")) . " 02:00:00 GMT");;
+    header("Cache-Control: max-age=86400");
     include('config/config.inc.php')
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
-    <link rel="manifest" href="manifest.json?v=2">
+    <link rel="manifest" href="manifest.json?v=8">
+    <meta name="theme-color" content="#396AA9">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="mobile-web-app-capable" content="yes">
@@ -23,7 +26,7 @@
 	<script src="http://grassboy.tw:35729/livereload.js" type="text/javascript"></script>
     -->
 	<link href="fonts/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
-	<link href="stylesheets/screen.css?v=3" media="screen, projection" rel="stylesheet" type="text/css" />
+	<link href="stylesheets/screen.css?v=4" media="screen, projection" rel="stylesheet" type="text/css" />
 	<script src="javascript/jquery.js" type="text/javascript"></script>
 	<script src="javascript/jquery.history.js" type="text/javascript"></script>
 	<title><?=$_title?></title>
@@ -193,7 +196,7 @@
 	</script>
 </div>
 <script src="javascript/controller.js" type="text/javascript"></script>
-<script src="javascript/app.js" type="text/javascript"></script>
+<script src="javascript/app.js?v=22" type="text/javascript"></script>
 </body>
 </html>
 

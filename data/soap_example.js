@@ -25,8 +25,8 @@ var soapMessage = '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:
 use 'http://grassboy.tw/ClickMRT/data/yql.xml' as soap_table;
 select * from soap_table where 
 url = 'http://ws.metro.taipei/trtcappweb/traintime.asmx' and 
-contenttype = "application/soap+xml; charset=utf-8" and
-postdata= '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">  <soap12:Body>    <GetNextTrain2 xmlns="http://tempuri.org/">        <stnid>042</stnid>    </GetNextTrain2>  </soap12:Body></soap12:Envelope>' and
+contenttype = "application/soap+xml; charset=utf-8" and 
+postdata= '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">  <soap12:Body>    <GetNextTrain2 xmlns="http://tempuri.org/">        <stnid>042</stnid>    </GetNextTrain2>  </soap12:Body></soap12:Envelope>' and 
 xpath = "Detail"
 
 -------------------------------------------------
